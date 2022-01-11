@@ -20,7 +20,7 @@ const mod = (n) => ((n % MOD) + MOD) % MOD;
 const add = (a, b) => mod(mod(a) + mod(b));
 const sub = (a, b) => mod(mod(a) - mod(b));
 function mul() {
-  for (var a = arguments, r = a[0], i = a.length; --i; )
+  for (var a = arguments, r = a[0], i = a.length; --i;)
     r = ((((r >> 16) * a[i]) % MOD) * 65536 + (r & 65535) * a[i]) % MOD;
   return r;
 }
@@ -59,5 +59,17 @@ function permutation(arr, len, store = "", permutations = []) {
 }
 
 function main() {
-  console.log(permutation([1, 2, 3], 2));
+  const n = +readLine();
+  let [finalX, finalY, finalZ] = [0, 0, 0];
+  for (let i = 0; i < n; i++) {
+    const [x, y, z] = readLine().split(" ").map(Number);
+    finalX += x;
+    finalY += y;
+    finalZ += z;
+  }
+  if (finalX === 0 && finalY === 0 && finalZ === 0) console.log('YES');
+  else console.log("NO");
 }
+
+
+
