@@ -9,9 +9,15 @@ class Search {
         for (let i = 0; i < word.length; ++i) {
             let char = word[i];
             if (!(char in obj)) {
-                obj[char] = {}
+                obj[char] = {
+                    next: {
+                        words: new Set()
+                    }
+                }
             }
-            obj = obj[char];
+            obj[char]['next']['words'].add(word);
+            obj = obj[char].next;
+
         }
         obj['done'] = true;
     }
@@ -22,9 +28,8 @@ class Search {
         for (let i = 0; i < word.length; i++) {
             const char = word[i];
             if (currentDictionary[char]) {
-                currentDictionary = currentDictionary[char];
-            }
-            else return false;
+                currentDictionary = currentDictionary[char].next
+            } else return false;
         }
 
         return currentDictionary['done'] || false;
@@ -36,24 +41,39 @@ class Search {
         for (let i = 0; i < word.length; i++) {
             const char = word[i];
             if (currentDictionary[char]) {
-                currentDictionary = currentDictionary[char];
-            }
-            else return false;
+                currentDictionary = currentDictionary[char].next
+            } else return false;
         }
 
         currentDictionary['done'] = false;
     }
 
+    elasticSearch(word) {
+        let currentDictionary = this.dictionary;
+        let words = {};
+
+        for (let i = 0; i < word.length; i++) {
+            const char = word[i];
+
+            if (currentDictionary[char]) {
+                words = currentDictionary[char]['next']['words'];
+                currentDictionary = currentDictionary[char]['next'];
+            } else {
+                return words = {}
+            }
+        }
+
+        return words;
+    }
 
 };
 
 const search = new Search();
 
 search.assign('hi');
-search.assign('cat');
-search.assign('hie');
+search.assign('hia')
+search.assign('hello');
+search.assign('mango')
+search.assign('news')
 
-console.log(JSON.stringify(search.dictionary));
-search.delete('hi');
-console.log(JSON.stringify(search.dictionary));
-console.log({ find: search.find('hi') });
+console.log({ search: search.elasticSearch('ne') });;
